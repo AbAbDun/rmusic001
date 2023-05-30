@@ -28,7 +28,7 @@ export default {
         { pic: require("../assets/swiper02.jpg") },
         { pic: require("../assets/swiper01.jpg") },
         { pic: require("../assets/swiper02.jpg") },
-        { pic: require("../assets/swiper01.jpg") }
+        { pic: require("../assets/swiper01.jpg") },
       ],
     };
   },
@@ -38,20 +38,26 @@ export default {
     this.imgs = res.data.banners;
     var swiper = new Swiper("#swiperIndex", {
       loop: true,
-      // autoplay: true,//自动轮播
+      autoplay: true, //自动轮播
       // paginationCickab1e: true,
       // direction:'vertical',
       //分页器
+      observer: true,
+      observeSlideChildren: true,
+      observeParents: true, //这三个可以去文档看下介绍，主要就是异步情况会重新加载swiper。
       pagination: {
         el: ".swiper-pagination",
         clickable: true, //分页小圆点可以点击
       },
+      speed: 800,
     });
+    
+    
   },
 };
 </script>
 
-<style lang="less" >
+<style lang="less">
 #swipercom {
   width: 7.5rem;
   #swiperIndex.swiper-container {

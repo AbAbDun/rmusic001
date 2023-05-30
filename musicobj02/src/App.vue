@@ -1,10 +1,20 @@
 <template>
 
   <router-view/>
+  <playcontroller></playcontroller>
 </template>
+<script>
+import playcontroller from "@/components/PlayController.vue"
+export default {
+  components:{
+    playcontroller
+  },
+  setup() {
+    
+  },
+}
+</script>
 
-<style lang="less">
-</style>
 <style lang="less">
 *{
   margin: 0;
@@ -20,5 +30,6 @@ a{
   color: #333;
   text-decoration: none;
 }
+
 
 </style>

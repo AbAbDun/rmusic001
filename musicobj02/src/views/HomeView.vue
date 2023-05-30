@@ -19,7 +19,7 @@ import HelloWorld from "@/components/HelloWorld.vue";
 import topNav from "@/components/TopNav.vue";
 import swiperCom from "@/components/SwiperCom.vue";
 import iconList from "@/components/IconList.vue";
-import musicList from "@/components/MusicList.vue";
+import musicList from "@/components/MusicList_setup().vue";
 
 export default {
   name: "HomeView",
