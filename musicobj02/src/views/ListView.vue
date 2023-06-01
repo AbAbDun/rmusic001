@@ -11,7 +11,8 @@ import listviewTop from "@/components/ListViewTop.vue";
 import playList from "@/components/PlayList.vue";
 import { getMusicList } from "@/api/index.js";
 import { useRoute } from "vue-router";
-import { onMounted,reactive } from "vue";
+import { onMounted, reactive } from "vue";
+import store from "@/store";
 export default {
   name: "listview",
   setup() {
@@ -32,8 +33,11 @@ export default {
       console.log(res);
       music.playlist = res.data.playlist;
       console.log(music);
+
+      //将当前专辑播放列表的数据传递到store中playlist中
+      store.commit("setPlayList", music.playlist.tracks);
     });
-    return {music}
+    return { music };
   },
   components: {
     listviewTop,

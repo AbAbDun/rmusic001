@@ -16,6 +16,15 @@ export function getMusic(limit=10){
 export function getMusicList(id){
     return axios.get(`${baseUrl}/playlist/detail?id=${id}`);
 }
+//获取歌词详细数据
+export function getLyric(id){
+    return axios.get(`${baseUrl}/lyric?id=${id}`);
+}
+//获取搜索歌曲的api   //search?keywords=海阔天空
+export function searchMusic(keywords){
+    return axios.get(`${baseUrl}/search?keywords=${keywords}`);
+}
+
 
 //对外抛出
-export default { getBanner,getMusic,getMusicList};
+export default { getBanner,getMusic,getMusicList,getLyric,searchMusic};

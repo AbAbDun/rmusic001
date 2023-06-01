@@ -1,17 +1,21 @@
 <template>
   <div class="playController">
     <div class="left">
-      <img :src="playlist[playCurrentIndex].al.picUrl" alt="" />
+      <img
+        :src="playlist[playCurrentIndex].al.picUrl"
+        alt=""
+        @click="show = !show"
+      />
       <div class="content">
         <div class="title">{{ playlist[playCurrentIndex].name }}</div>
         <div class="tips">横划可以切换上下首哦</div>
       </div>
     </div>
     <div class="right">
-      <svg class="icon" aria-hidden="true" @click="play">
+      <svg class="icon" v-if="paused" aria-hidden="true" @click="play">
         <use xlink:href="#icon-bofang1"></use>
       </svg>
-      <svg class="icon" aria-hidden="true" @click="stop">
+      <svg class="icon" v-else aria-hidden="true" @click="play">
         <use xlink:href="#icon-iconstop"></use>
       </svg>
       <svg class="icon" aria-hidden="true">
@@ -21,8 +25,16 @@
     <!--如何获取播放歌曲的mp3地址https :/ /music .163. com/ song/ media/outer/url?id=歌曲id . mp3-->
     <!-- controls audio标签属性，一般不显示-->
     <!-- audio play()播放音乐 pause()暂停音乐-->
-
-    <audio  ref="audio"
+    <!-- 歌曲详情页面 -->
+    <play-music
+      :playDetail="playlist[playCurrentIndex]"
+      :play="play"
+      :paused="paused"
+      v-show="show"
+      @back="show = !show"
+    ></play-music>
+    <audio
+      ref="audio"
       :src="`https://music.163.com/song/media/outer/url?id=${playlist[playCurrentIndex].id}.mp3`"
     ></audio>
   </div>
@@ -30,18 +42,45 @@
 
 <script>
 import { mapState } from "vuex";
+import { getLyric } from "@/api/index.js"; //@指的是项目 目录src
+import playMusic from "./PlayMusic.vue";
+import store from "@/store";
 export default {
   name: "playcontroller",
+  data() {
+    return {
+      paused: true, //当前音乐是否处于暂停状态
+      show: false, //歌曲详情是否显示
+    };
+  },
+  async mounted() {
+    //view与model绑定成功之后
+    var res = await getLyric(this.playlist[this.playCurrentIndex].id);
+    store.commit("setLyric", res.data.lrc.lyric); //修改状态管理库中的歌词数据
+  },
+  async updated() {
+    //view与model數据更新之后
+    var res = await getLyric(this.playlist[this.playCurrentIndex].id);
+    store.commit("setLyric", res.data.lrc.lyric); //修改状态管理库中的歌词数据
+  },
+  components: {
+    playMusic,
+  },
   computed: {
     ...mapState(["playlist", "playCurrentIndex"]), //获取正在播放播曲列表，以及正在播放歌曲下标
   },
   methods: {
     play() {
-      // this. $refs . audio获取audio标签
-      this.$refs.audio.play();
-    },
-    stop() {
-      this.$refs.audio.pause();
+      if (this.$refs.audio.paused) {
+        //当 前audio处于暂停状态
+        // this. $refs.audio获取audio标签
+        this.$refs.audio.play();
+        this.paused = false;
+      } else {
+        //当 前audio处于播放状态
+        this.$refs.audio.pause();
+        this.paused = true;
+      }
     },
   },
 };
